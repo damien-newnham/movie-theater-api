@@ -1,10 +1,21 @@
-const Show = require('./Show')
-const User = require('./User')
+const { Sequelize } = require("sequelize");
 
-Show.belongsToMany(User, { through: 'watched' })
-User.belongsToMany(Show, { through: 'watched' })
+const sequelize = new Sequelize({
+  dialect: "sqlite",
+  storage: "./db/db.sqlite",
+});
+
+const ShowModel = require("./Show");
+const UserModel = require("./User");
+
+const Show = ShowModel(sequelize);
+const User = UserModel(sequelize);
+
+Show.belongsToMany(User, { through: "watched" });
+User.belongsToMany(Show, { through: "watched" });
 
 module.exports = {
   Show,
-  User
-}
+  User,
+  sequelize, // Export the Sequelize instance
+};
